@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  address: localhost
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: admin-panel
+            uri: lb://admin-panel
+            predicates:
+              - Path=/api/v1/admin/**
+            filters:
+              - StripPrefix=3
+          - id: user-panel
+            uri: lb://user-panel
+            predicates:
+              - Path=/api/v1/user-panel/**
+            filters:
+              - StripPrefix=3
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetchRegistry: true
+    registerWithEureka: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web:
+      gateway: TRACE
+      route:
+        RouteDefinitionRouteLocator: INFO

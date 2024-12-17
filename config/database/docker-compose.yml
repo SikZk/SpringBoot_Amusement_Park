@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  oracle:
+    image: container-registry.oracle.com/database/express:latest
+    container_name: oracle
+    environment:
+      ORACLE_PWD: oracle    # Password for the SYS and SYSTEM accounts
+      ORACLE_CHARACTERSET: AL32UTF8  # Sets the database character set
+    volumes:
+      - ./oracle_data:/opt/oracle/oradata  # Persistent data storage
+    ports:
+      - "1521:1521"  # Port for Oracle Database
+      - "5500:5500"  # Port for Oracle Enterprise Manager
+    networks:
+      - database
+    restart: unless-stopped
+
+networks:
+  database:
+    driver: bridge
+
+volumes:
+  oracle_data:
