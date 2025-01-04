@@ -5,13 +5,13 @@ spring:
   application:
     name: admin-panel
   datasource:
-    username: login
-    url: jdbc:postgresql://localhost:5432/amusement-park
-    password: haslo
+    username: C##AmusementPark
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    password: password123
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     hibernate:
       ddl-auto: update

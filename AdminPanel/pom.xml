@@ -15,6 +15,7 @@
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <oracle-driver-path>/home/kernel/IdeaProjects/BADA_Amusement_Park/config/database</oracle-driver-path>
     </properties>
 
     <dependencies>
@@ -26,6 +27,16 @@
             <groupId>com.fasterxml.woodstox</groupId>
             <artifactId>woodstox-core</artifactId>
             <version>7.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <scope>system</scope>
+            <systemPath>${oracle-driver-path}/ojdbc11.jar</systemPath>
         </dependency>
     </dependencies>
     <dependencyManagement>
