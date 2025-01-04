@@ -12,7 +12,7 @@ spring:
           - id: admin-panel
             uri: lb://admin-panel
             predicates:
-              - Path=/api/v1/admin/**
+              - Path=/api/v1/admin-panel/**
             filters:
               - StripPrefix=3
           - id: user-panel
