@@ -9,12 +9,12 @@ export default function ImageSlider({ backgroundImage, rightImage }) {
                 <div className="imageMainSliderContainerLeftContent">
                     <h1>
                         <div className="imageMainSliderContainerLeftContentHeader">
-                            Miody<br />
-                            z Warmii
+                            Fast<br />
+                            Lopez
                         </div>
                     </h1>
                     <div className="imageMainSliderContainerLeftContentDescription">
-                        Całkowicie naturalny miód z rodzinnej pasieki w sercu Warmii.
+                        Amusement park straight outta Poland
                     </div>
                     <div className="imageMainSliderContainerLeftContentButtonContainer">
                         <Button
@@ -34,7 +34,7 @@ export default function ImageSlider({ backgroundImage, rightImage }) {
                             }}
                             variant="contained"
                         >
-                            Nasz Blog
+                            Our Blog
                         </Button>
                         <Button
                             className="rightButton"
@@ -53,7 +53,7 @@ export default function ImageSlider({ backgroundImage, rightImage }) {
                             }}
                             variant="contained"
                         >
-                            Nasza oferta
+                            Our Attractions
                         </Button>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import DehazeIcon from '@mui/icons-material/Dehaze';
 // import SearchIcon from '@mui/icons-material/Search';
 
 
-const logo = `${WEBSITE_PATH}/img/logoMiodyWowka.jpg`;
+const logo = `${WEBSITE_PATH}/img/logo.png`;
 
 
 export default function TopBar() {
@@ -39,48 +39,30 @@ export default function TopBar() {
                     />
                 </div>
                 <div className="leftTopBarComponentOption leftTopBarComponentOptionShopOption">
-                    <DehazeIcon /><div>Sklep</div>
+                    <DehazeIcon /><div>Buy tickets</div>
                 </div>
                 <div className="leftTopBarComponentOption">
-                    Baza wiedzy
+                    Blog
                 </div>
                 <div className="leftTopBarComponentOption">
-                    O nas
+                    About us
                 </div>
                 <div className="leftTopBarComponentOption">
-                    Kontakt
+                    Contact
                 </div>
             </div>
             <div className="topBarComponent rightTopBarComponent">
                 <div className="rightTopBarComponentOption rightTopBarComponentOptionIcon">
                     <ShoppingCartIcon fontSize="medium"/>
                     <div>
-                        Koszyk
+                        Cart
                     </div>
                 </div>
                 <div className="rightTopBarComponentOption rightTopBarComponentOptionIcon">
                     <AccountBoxIcon fontSize="medium"/>
                     <div>
-                        Konto
+                        Account
                     </div>
-                </div>
-                <div className="rightTopBarComponentOption rightTopBarComponentOptionSearchBar">
-                    <TextField
-                        variant="standard"
-                        placeholder="Wyszukaj"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    {/*<SearchIcon className="searchIcon"/>*/}
-                                </InputAdornment>
-                            ),
-                            classes: {
-                                root: 'searchInputRoot',
-                                underline: 'searchInputUnderline',
-                            },
-                        }}
-                        className="searchField"
-                    />
                 </div>
             </div>
         </div>

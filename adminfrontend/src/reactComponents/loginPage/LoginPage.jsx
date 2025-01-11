@@ -163,7 +163,7 @@ export default function LoginPage() {
                             required
                             id="filled-password-input"
                             variant="filled"
-                            label={t("loginForm.password")}
+                            label={"Password"}
                             type="password"
                             autoComplete="current-password"
                             value={password}
@@ -177,7 +177,7 @@ export default function LoginPage() {
                             size="large"
                             onClick={handleClick}
                         >
-                            {t("loginForm.submit")}
+                            {"submit"}
                         </Button>
                     </div>
                 </Box>

@@ -9,10 +9,10 @@ export default function CategoriesList({ leftImage, middleImage,rightImage }) {
                 <div className="CategoryInCategoriesHeader">
                     <h2>
                         <div className="CategoryInCategoriesHeaderHeader">
-                            <div style={{color: "#B4B4B8"}}>Nasze</div>&nbsp;kategorie
+                            <div style={{color: "#B4B4B8"}}>Our</div>&nbsp;attractions
                         </div>
                         <div className="CategoryInCategoriesHeaderDescription">
-                            Na jaki miód masz dziś ochotę?
+                            What do you want to try next nigger?
                         </div>
                     </h2>
                 </div>
@@ -22,7 +22,7 @@ export default function CategoriesList({ leftImage, middleImage,rightImage }) {
                 }}>
                     <img src={leftImage} alt="Miody Tradycyjne" className="CategoryInCategoriesListImage"/>
                     <div className="CategoryInCategoriesListCategoryName">
-                        <div style={{opacity: 1}}>Miody tradycyjne</div>
+                        <div style={{opacity: 1}}>Extreme zone</div>
                     </div>
                 </div>
                 <div className="CategoryInCategoriesList" style={{
@@ -31,7 +31,7 @@ export default function CategoriesList({ leftImage, middleImage,rightImage }) {
                 }}>
                     <img src={middleImage} alt="Zestawy Prezentowe" className="CategoryInCategoriesListImage"/>
                     <div className="CategoryInCategoriesListCategoryName">
-                        <div style={{opacity: 1}}>Miody na prezent</div>
+                        <div style={{opacity: 1}}>Family zone</div>
                     </div>
                 </div>
                 <div className="CategoryInCategoriesList" style={{
@@ -40,7 +40,7 @@ export default function CategoriesList({ leftImage, middleImage,rightImage }) {
                 }}>
                     <img src={rightImage} alt="Miody Smakowe" className="CategoryInCategoriesListImage"/>
                     <div className="CategoryInCategoriesListCategoryName">
-                        <div style={{opacity: 1}}>Miody smakowe</div>
+                        <div style={{opacity: 1}}>Little kids zone</div>
                     </div>
                 </div>
             </div>

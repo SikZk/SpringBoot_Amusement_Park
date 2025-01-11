@@ -7,12 +7,12 @@ import CategoriesList from "../generalComponents/CategoriesList";
 import QuickInfoBar from "../generalComponents/QuickInfoBar";
 import {WEBSITE_PATH} from "../../config/config";
 
-const backgroundImageSlider = `${WEBSITE_PATH}/img/mainSlider/MainSliderBackground.png`;
-const rightImageSlider = `${WEBSITE_PATH}/img/mainSlider/MainSliderImageRight2.png`;
+const backgroundImageSlider = `${WEBSITE_PATH}/img/mainSlider/amusementpark1.jpg`;
+const rightImageSlider = `${WEBSITE_PATH}/img/mainSlider/amusementpark2.webp`;
 
-const leftImageCategoriesList = `${WEBSITE_PATH}/img/categoriesList/MiodyTradycyjne.png`;
-const middleImageCategoriesList = `${WEBSITE_PATH}/img/categoriesList/ZestawyPrezentowe.png`;
-const rightImageCategoriesList = `${WEBSITE_PATH}/img/categoriesList/MiodySmakowe.png`;
+const leftImageCategoriesList = `${WEBSITE_PATH}/img/categoriesList/extreme.webp`;
+const middleImageCategoriesList = `${WEBSITE_PATH}/img/categoriesList/family.jpg`;
+const rightImageCategoriesList = `${WEBSITE_PATH}/img/categoriesList/littlekids.jpg`;
 
 const firstImageQuickInfoBar = `${WEBSITE_PATH}/img/quickInfoBar/EcoFriendlyIcon.png`;
 const secondImageQuickInfoBar = `${WEBSITE_PATH}/img/quickInfoBar/HandmadeIcon.png`;
@@ -43,9 +43,6 @@ export default function HomePage() {
                     <PopularProductsList
 
                     />
-                    <div style={{minHeight: '1000px', display: 'flex'}}>
-
-                    </div>
                 </div>
             <BottomBar />
         </>

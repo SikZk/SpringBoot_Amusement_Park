@@ -3,7 +3,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "./loginPage/LoginPage";
 import PrivateAdminRoutes from "../config/routes/PrivateAdminRoutes";
 import HomePage from "./homePage/HomePage";
-
+import TicketPage from "./ticketPage/TicketPage";
+import AccountPage from "./accountPage/AccountPage";
 
 export default function App() {
   return (
@@ -13,6 +14,16 @@ export default function App() {
                   exact
                   path="/login"
                   element={<LoginPage />}
+              />
+              <Route
+                  exact
+                  path="/mytickets"
+                  element={<TicketPage />}
+              />
+              <Route
+                  exact
+                  path="/myaccount"
+                  element={<AccountPage />}
               />
               <Route
                   exact
