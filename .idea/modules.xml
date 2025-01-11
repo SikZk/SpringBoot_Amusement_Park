@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AdminPanel.iml" filepath="$PROJECT_DIR$/AdminPanel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BADA_Amusement_Park.iml" filepath="$PROJECT_DIR$/BADA_Amusement_Park.iml" />
       <module fileurl="file://$PROJECT_DIR$/adminfrontend.iml" filepath="$PROJECT_DIR$/adminfrontend.iml" />
     </modules>
   </component>

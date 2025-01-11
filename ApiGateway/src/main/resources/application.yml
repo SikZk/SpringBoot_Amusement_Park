@@ -3,6 +3,20 @@ server:
   address: localhost
 
 spring:
+  datasource:
+    username: C##AmusementPark
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    password: password123
+
+  jpa:
+    hibernate:
+      ddl-auto: validate   # or none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+        hql:
+          bulk_id_strategy: org.hibernate.hql.spi.id.inline.InlineIdsOrClauseBulkIdStrategy
   application:
     name: api-gateway
   cloud:
@@ -36,3 +50,8 @@ logging:
       gateway: TRACE
       route:
         RouteDefinitionRouteLocator: INFO
+
+custom:
+  security:
+    jwt:
+      secret: dac6c0036c5410a38089cb7837e60fa1e388ccaea8f910f65934cf09b6f28bb1
