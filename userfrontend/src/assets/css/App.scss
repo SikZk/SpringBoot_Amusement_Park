@@ -1,0 +1,384 @@
+$backgroundWhite: #F5F5F5;
+$footerBlack: #1E201E;
+$softGrey: #B4B4B8;
+$softEcru: #F5EEE6;
+$mediumEcru: #FFEAC5;
+$mainShopColor: #a07c45;
+
+body {
+  margin: 0;
+  font-family: "arial", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mainContainer {
+  display: flex;
+  min-width: 100%;
+  background-color: $backgroundWhite;
+  flex-direction: column;
+
+}
+.imageMainSlider {
+  display: flex;
+  width: 100%;
+  height: 85vh;
+  position: relative;
+}
+
+.imageMainSliderContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: $softEcru;
+}
+.imageMainSliderContainerLeftContent {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  justify-content: center;
+  top: 0;
+  left: 8%;
+  width: 80%;
+  height: 100%;
+}
+.imageMainSliderContainerLeftContentHeader {
+  color: $backgroundWhite;
+  text-shadow:
+          -2px -2px 0 $footerBlack,
+          2px -2px 0 $footerBlack,
+          -2px 2px 0 $footerBlack,
+          2px 2px 0 $footerBlack;
+  font-weight: bold;
+  font-size: 5rem;
+  letter-spacing: 7px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
+.imageMainSliderContainerLeftContentDescription {
+  margin-top: 1%;
+  color: $footerBlack;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 35%;
+}
+.imageMainSliderContainerLeftContentButtonContainer {
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+.leftButton {
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.rightButton {
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.imageMainSliderContainerImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 75%;
+  opacity: 0.2;
+}
+.imageMainSliderContainerImageRight{
+  border-radius: 5px;
+  position: absolute;
+  top: 4%;
+  right: 2%;
+  height: 92%;
+  width: 50%;
+  overflow: hidden;
+}
+.imageMainSliderContainerImageRightImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 1;
+}
+.bottomBarContainer{
+  display: flex;
+  width: 100%;
+  background-color: $footerBlack;
+  min-height: 300px;
+}
+.topBarContainer {
+  display: flex;
+  width: 100%;
+  background-color: $backgroundWhite;
+  border-bottom: 2px solid $footerBlack;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topBarComponent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 50%;
+}
+.leftTopBarComponent {
+  padding-left: 2%;
+  gap: 7%;
+}
+.leftTopBarComponentOption {
+  position: relative;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+.leftTopBarComponentOptionShopOption {
+  background-color: $footerBlack;
+  color: $backgroundWhite;
+  border-radius: 3px;
+  gap: 5px;
+  padding: 8px;
+}
+
+.leftTopBarComponentOption::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: $footerBlack;
+  transition: width 0.3s ease-in-out;
+}
+
+.leftTopBarComponentOption:hover::before {
+  width: 100%;
+}
+.leftTopBarComponentOptionShopOption:hover::before {
+  width: 0;
+}
+.logoContainer {
+  padding: 5px;
+  margin-right: 7%;
+}
+.rightTopBarComponent {
+  padding-right: 8%;
+  gap: 5%;
+  direction: rtl;
+  text-align: right;
+}
+.rightTopBarComponentOptionIcon {
+  font-size: 1rem;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+.rightTopBarComponentOptionIcon::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: $footerBlack;
+  transition: width 0.3s ease-in-out;
+}
+.rightTopBarComponentOptionIcon:hover::before {
+  width: 100%;
+}
+.rightTopBarComponentOption {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  direction: ltr;
+}
+
+.rightTopBarComponentOptionSearchBar {
+  padding-bottom: 10px;
+}
+
+.searchField {
+  width: 200px;
+  color: $mainShopColor;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.searchField:hover {
+  background-color: $backgroundWhite;
+}
+
+.searchField:focus-within {
+  background-color: $backgroundWhite;
+}
+
+.searchIcon {
+  color: $softGrey;
+}
+
+.searchInputUnderline::before {
+  border-bottom: 2px solid $softGrey;
+}
+
+.searchInputUnderline:hover::before {
+  border-bottom: 2px solid $footerBlack;
+}
+
+.searchInputUnderline::after {
+  border-bottom: 2px solid $mainShopColor !important;
+}
+.searchInputUnderline::after {
+  border-bottom: 2px solid $footerBlack;
+}
+
+.CategoriesListMainContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: $backgroundWhite;
+  padding: 3% 7%;
+}
+
+.CategoryInCategoriesListUnderGrid {
+  display: flex;
+  width: 100%;
+  min-height: 50px;
+  margin-top: 8vh;
+  flex-direction: row;
+}
+.CategoryInCategoriesListUnderGridLeft {
+  display: flex;
+  width: 60%;
+}
+.CategoryInCategoriesListUnderGridRight {
+  display: flex;
+  font-size: 0.8rem;
+  text-align: justify;
+  width: 40%;
+}
+
+.CategoryInCategoriesListGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: repeat(4, 150px);
+  column-gap: 2%;
+}
+
+.CategoryInCategoriesHeader {
+  grid-column: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  grid-row: 1 / span 1;
+}
+.CategoryInCategoriesHeaderHeader {
+  display: flex;
+  flex-direction: row;
+  color: $backgroundWhite;
+  text-shadow:
+          -1px -1px 0 $footerBlack,
+          1px -1px 0 $footerBlack,
+          -1px 1px 0 $footerBlack,
+          1px 1px 0 $footerBlack;
+  font-weight: bold;
+  font-size: 3.5rem;
+  letter-spacing: 7px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.CategoryInCategoriesHeaderDescription {
+  margin-top: 1%;
+  color: $footerBlack;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.CategoryInCategoriesList {
+  position: relative;
+  overflow: hidden;
+}
+.CategoryInCategoriesListImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 1;
+  max-height: 100%;
+}
+.CategoryInCategoriesListCategoryName {
+  display: flex;
+  position: absolute;
+  color: $backgroundWhite;
+  font-size: 2rem;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  background-color: $footerBlack;
+  opacity: 0.9;
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  justify-items: center;
+  align-items: center;
+}
+
+.quickInfoBarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  background-color: $softEcru;
+  padding: 4% 10%;
+  gap: 4%;
+}
+.quickInfoBarElement {
+  width: 17%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.quickInfoBarElementIcon {
+  width: 70%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+.quickInfoBarElementDescription {
+  text-align: center;
+}
+
+
+
+
+
+
+.popularProductsListMainContainer {
+  display: flex;
+  align-items: center;
+  padding: 3% 7%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
