@@ -64,7 +64,7 @@ export default function CategoriesList({ leftImage, middleImage,rightImage }) {
                         }}
                         variant="contained"
                     >
-                        Wszystkie kategorie
+                        All attractions
                     </Button>
                     <Button
                         className="rightButton"
@@ -83,11 +83,11 @@ export default function CategoriesList({ leftImage, middleImage,rightImage }) {
                         }}
                         variant="contained"
                     >
-                        Współpraca z nami
+                        Concact
                     </Button>
                 </div>
                 <div className="CategoryInCategoriesListUnderGridRight">
-                    Nasze miody pochodzą z dziewiczo czystych terenów Warmii, gdzie pszczoły zbierają nektar z najczystszych kwiatów. Każdy słoik miodu to wynik naszej pasji i dbałości o każdy szczegół. Jesteśmy przekonani, że nasze miody spełnią oczekiwania nawet najbardziej wymagających klientów.
+                    Since opening in 2020 our park is one of the greatest amusement parks in the world and is obligatory destination for every tourist, that come to Poland. Fast Lopez has a great number of amazing attraction and will give you a lot of lasting memories, we can promise you that. Come here and give it a try!
                 </div>
             </div>
         </div>

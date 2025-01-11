@@ -31,7 +31,7 @@ export default function TicketPage() {
                             <TableCell>Attraction name</TableCell>
                             <TableCell align="right">Price</TableCell>
                             <TableCell align="right">Date</TableCell>
-                            <TableCell align="right">Sth</TableCell>
+                            <TableCell align="right">QR code</TableCell>
                             <TableCell align="right">Sth</TableCell>
                         </TableRow>
                     </TableHead>
