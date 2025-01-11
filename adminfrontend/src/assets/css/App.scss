@@ -1,3 +1,37 @@
 .App {
   text-align: center;
 }
+.submitButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.loginBox{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  min-height: 500px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: url("../img/loginFormBackground.png");
+  background-size: cover;
+  background-position: center; // Add this line
+  border: 10px solid #222;
+  border-radius:95% 4% 97% 5%/4% 94% 3% 95%;
+  position: relative;
+}
+.pageContainer{
+  padding-top: 1vh;
+  display: flex;
+  flex-direction: column; // Change this line
+  min-height: 100vh;
+  max-width: 96vw;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f0f0f0;
+}
