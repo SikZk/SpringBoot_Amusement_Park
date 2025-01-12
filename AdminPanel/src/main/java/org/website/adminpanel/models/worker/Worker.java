@@ -57,10 +57,10 @@ public class Worker implements UserDetails {
     @Temporal(TemporalType.DATE)
     private Date employmentDate;
 
-    @Column(name = "EMAIL", length = 30)
+    @Column(name = "EMAIL", length = 30, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "PASSWORD", length = 60)
+    @Column(name = "PASSWORD", length = 60, unique = true, nullable = false)
     private String password;
 
     @Column(name = "BANK_ACCOUNT_NUMBER", length = 28)

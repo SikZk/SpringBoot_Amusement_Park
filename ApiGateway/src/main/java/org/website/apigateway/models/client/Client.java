@@ -1,13 +1,18 @@
-package org.website.adminpanel.models.client;
+package org.website.apigateway.models.client;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.website.adminpanel.models.amusement_park.AmusementPark;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.website.apigateway.models.worker.WorkerRole;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,7 +20,7 @@ import java.util.Date;
 @Table(name = "CLIENTS")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
+public class Client implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CLIENTS")
     @SequenceGenerator(name = "SEQ_CLIENTS", sequenceName = "SEQ_CLIENTS", allocationSize = 1)
@@ -47,11 +52,37 @@ public class Client {
     @Column(name = "PASSWORD", nullable = false, length = 60)
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "PARK_ID")
-    private AmusementPark park;
-
     @Column(name = "ROLE")
     @Enumerated(EnumType.STRING)
     private ClientRole role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {return true;}
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {return true;}
 }

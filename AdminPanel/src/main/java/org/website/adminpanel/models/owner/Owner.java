@@ -18,12 +18,11 @@ public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_OWNERS")
     @SequenceGenerator(name = "SEQ_OWNERS", sequenceName = "SEQ_OWNERS", allocationSize = 1)
-    @Column(name = "OWNER_ID", nullable = false)
     private Integer ownerId;
 
-    @Column(name = "NAME", nullable = false, length = 30)
+    @Column(name = "NAME", length = 30)
     private String name;
 
-    @Column(name = "SURNAME", nullable = false, length = 30)
+    @Column(name = "SURNAME", length = 30)
     private String surname;
 }

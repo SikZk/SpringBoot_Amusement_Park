@@ -1,6 +1,7 @@
 package org.website.adminpanel.models.amusement_park;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +28,10 @@ public class AmusementPark {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "OWNER_ID", nullable = false)
+    @JsonBackReference
     private Owner owner;
 
     @ManyToOne
-    @JoinColumn(name = "ADDRESS_ID", nullable = false)
+    @JsonBackReference
     private Address address;
 }

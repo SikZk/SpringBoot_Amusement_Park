@@ -28,9 +28,5 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(workerService.login(request));
     }
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout() {
-        return ResponseEntity.ok("elo");
-    }
 
 }

@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate   # or none
+      ddl-auto: update   # or none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect

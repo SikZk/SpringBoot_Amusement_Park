@@ -22,12 +22,11 @@ public class RegisterRequest {
     private String idNumber;
     private String phoneNumber;
     private String salary;
-    private String parkName;
+    private String parkId;
     private String city;
     private String street;
     private String postalCode;
     private String streetNumber;
-    private String role;
     private String workerType;
     private String bookletExpirationDate;
     private String specialization;

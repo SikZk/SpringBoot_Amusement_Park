@@ -1,4 +1,4 @@
-package org.website.apigateway.config;
+package org.website.adminpanel.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,24 +12,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.website.apigateway.models.client.ClientRepository;
-import org.website.apigateway.models.worker.WorkerRepository;
+import org.website.adminpanel.models.worker.WorkerRepository;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
     private final WorkerRepository workerRepository;
-    private final ClientRepository clientRepository;
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> workerRepository.findByEmail(username)
-                .map(worker -> (UserDetails) worker)
-                .or(() -> clientRepository.findByEmail(username)
-                        .map(client -> (UserDetails) client))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return workerRepository.findWorkerByEmail(username).orElseThrow();
+            }
+        };
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -37,14 +38,8 @@ public class ApplicationConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

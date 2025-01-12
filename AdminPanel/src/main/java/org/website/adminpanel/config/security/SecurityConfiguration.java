@@ -1,4 +1,4 @@
-package org.website.adminpanel.config;
+package org.website.adminpanel.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
