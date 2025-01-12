@@ -1,17 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {WEBSITE_PATH} from "../../config/config";
+import React, { useEffect, useState } from 'react';
+import { WEBSITE_PATH } from "../../config/config";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {InputAdornment, TextField} from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import DehazeIcon from '@mui/icons-material/Dehaze';
-// import SearchIcon from '@mui/icons-material/Search';
-
 
 const logo = `${WEBSITE_PATH}/img/logo.png`;
 
-
 export default function TopBar() {
-
     const [logoSize, setLogoSize] = useState(100);
     useEffect(() => {
         const handleScroll = () => {
@@ -31,12 +27,15 @@ export default function TopBar() {
         <div className="topBarContainer">
             <div className="topBarComponent leftTopBarComponent">
                 <div className="logoContainer">
-                    <img
-                        src={logo}
-                        alt="Logo"
-                        className="logo"
-                        style={{width: `${logoSize}px`}}
-                    />
+                    {/* Dodano odnośnik wokół logo */}
+                    <a href={`${WEBSITE_PATH}/`} style={{ textDecoration: 'none' }}>
+                        <img
+                            src={logo}
+                            alt="Logo"
+                            className="logo"
+                            style={{ width: `${logoSize}px` }}
+                        />
+                    </a>
                 </div>
                 <div className="leftTopBarComponentOption leftTopBarComponentOptionShopOption">
                     <DehazeIcon /><div>Buy tickets</div>
@@ -53,18 +52,22 @@ export default function TopBar() {
             </div>
             <div className="topBarComponent rightTopBarComponent">
                 <div className="rightTopBarComponentOption rightTopBarComponentOptionIcon">
-                    <ShoppingCartIcon fontSize="medium"/>
+                    <ShoppingCartIcon fontSize="medium" />
                     <div>
                         Cart
                     </div>
                 </div>
-                <div className="rightTopBarComponentOption rightTopBarComponentOptionIcon">
-                    <AccountBoxIcon fontSize="medium"/>
+                <a
+                    href={`${WEBSITE_PATH}/myaccount`}
+                    className="rightTopBarComponentOption rightTopBarComponentOptionIcon"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                    <AccountBoxIcon fontSize="medium" />
                     <div>
                         Account
                     </div>
-                </div>
+                </a>
             </div>
         </div>
-    )
+    );
 }

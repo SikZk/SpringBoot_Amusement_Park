@@ -40,11 +40,7 @@ export default function HomePage() {
                         thirdImage={thirdImageQuickInfoBar}
                         fourthImage={fourthImageQuickInfoBar}
                     />
-                    <PopularProductsList
-
-                    />
                 </div>
-            <BottomBar />
         </>
     );
 }

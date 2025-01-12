@@ -6,29 +6,29 @@ export default function QuickInfoBar({firstImage, secondImage, thirdImage, fourt
             <div className="quickInfoBarElement">
                 <img src={firstImage} alt="firstImage" className="quickInfoBarElementIcon" />
                 <div className="quickInfoBarElementDescription">
-                    <h3>Ekologiczne produkty</h3>
-                    <p>Wszystkie nasze produkty są w 100% ekologiczne</p>
+                    <h3>Eco-friendly politics</h3>
+                    <p>We use renewable energy sources to run attractions</p>
                 </div>
             </div>
             <div className="quickInfoBarElement">
                 <img src={secondImage} alt="secondImage" className="quickInfoBarElementIcon" />
                 <div className="quickInfoBarElementDescription">
-                    <h3>Ręcznie robione</h3>
-                    <p>Wszystkie nasze produkty są ręcznie robione</p>
+                    <h3>Safety</h3>
+                    <p>Attractions was constructed by world-class engineers</p>
                 </div>
             </div>
             <div className="quickInfoBarElement">
                 <img src={thirdImage} alt="thirdImage" className="quickInfoBarElementIcon" />
                 <div className="quickInfoBarElementDescription">
-                    <h3>Darmowa dostawa</h3>
-                    <p>Darmowa dostawa przy zamówieniu powyżej 100zł</p>
+                    <h3>Cheap transport</h3>
+                    <p>We offer discount for transport from big cities</p>
                 </div>
             </div>
             <div className="quickInfoBarElement">
                 <img src={fourthImage} alt="fourthImage" className="quickInfoBarElementIcon" />
                 <div className="quickInfoBarElementDescription">
-                    <h3>Zespół</h3>
-                    <p>Nasz zespół jest zawsze gotowy do pomocy</p>
+                    <h3>Team</h3>
+                    <p>Staff is well trained and ready for every surprise</p>
                 </div>
             </div>
         </div>
