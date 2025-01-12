@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WEBSITE_PATH } from "../../config/config";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { InputAdornment, TextField } from "@mui/material";
 import DehazeIcon from '@mui/icons-material/Dehaze';
 
 const logo = `${WEBSITE_PATH}/img/logo.png`;
@@ -51,12 +49,6 @@ export default function TopBar() {
                 </div>
             </div>
             <div className="topBarComponent rightTopBarComponent">
-                <div className="rightTopBarComponentOption rightTopBarComponentOptionIcon">
-                    <ShoppingCartIcon fontSize="medium" />
-                    <div>
-                        Cart
-                    </div>
-                </div>
                 <a
                     href={`${WEBSITE_PATH}/myaccount`}
                     className="rightTopBarComponentOption rightTopBarComponentOptionIcon"

@@ -11,7 +11,7 @@ const images = [
         url: `${WEBSITE_PATH}/img/accountPage/settings.png`,
         title: 'Account settings',
         width: '33.2%',
-        link: `${WEBSITE_PATH}/account/settings`,
+        link: `${WEBSITE_PATH}/settings`,
     },
     {
         url: `${WEBSITE_PATH}/img/accountPage/ticket.png`,
