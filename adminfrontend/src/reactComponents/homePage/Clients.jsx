@@ -84,7 +84,7 @@ export default function Clients(props) {
     }
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'lastName', headerName: t("SalonManager.nameAndSurname"), width: 200 },
+        { field: 'lastName', headerName: "surname", width: 200 },
         { field: 'phoneNumber', headerName: t("SalonManager.phoneNumber"), width: 200 },
         { field: 'email', headerName: t("SalonManager.email"), width: 200 },
         { field: 'comment', headerName: t("SalonManager.comment"), width: 200 },
@@ -120,7 +120,7 @@ export default function Clients(props) {
     const [rows, setRows] = React.useState([]);
 
     const loadTable = () => {
-        fetch(`${api}/salon/client/getAllClients`,{
+        fetch(`${api}/admin-panel/client/getAll`,{
             method: 'GET',
             headers:{'Content-Type': 'application/json'},
             credentials:'include'
@@ -132,7 +132,7 @@ export default function Clients(props) {
                 return response.json();
             })
             .then(data => {
-                const clientNames = data.map(client => ({ id: client.id, lastName: client.nameandsurname,phoneNumber:client.phoneNumber,email:client.email,comment:client.comment}));
+                const clientNames = data.map(client => ({ id: client.clientId, lastName: client.name,phoneNumber:client.phoneNumber,email:client.email,comment:client.park.name}));
                 setRows(clientNames);
             })
             .catch(error => {
