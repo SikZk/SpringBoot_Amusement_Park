@@ -74,14 +74,14 @@ export default function Procedures(props) {
     }
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: t("SalonManager.name"), width: 200 },
-        { field: 'duration', headerName: t("SalonManager.duration"), width: 200 },
-        { field: 'price', headerName: t("SalonManager.price"), width: 200 },
-        { field: 'description', headerName: t("SalonManager.description"), width: 200 },
+        { field: 'name', headerName: "name", width: 200 },
+        { field: 'duration', headerName: "duration", width: 200 },
+        { field: 'price', headerName: "price", width: 200 },
+        { field: 'description', headerName: "description", width: 200 },
         {
             field: 'actions',
             type: 'actions',
-            headerName: t("SalonManager.actions"),
+            headerName: "Actions",
             width: 110,
             cellClassName: 'actions',
             getActions: (params) => {
@@ -109,7 +109,7 @@ export default function Procedures(props) {
     const [rows, setRows] = React.useState([]);
 
     const loadTable = () => {
-        fetch(`${api}/salon/procedure/getAllProcedures`,{
+        fetch(`${api}/admin-panel/attraction/getAll`,{
             method: 'GET',
             headers:{'Content-Type': 'application/json'},
             credentials:'include'

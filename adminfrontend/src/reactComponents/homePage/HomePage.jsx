@@ -227,10 +227,10 @@ export default function HomePage(props) {
                 <Box sx={{ width: '100%',}}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab label= {t("SalonManager.visits")} sx={{width:'15vw'}} {...a11yProps(0)} />
-                            <Tab label={t("SalonManager.clients")} sx={{width:'15vw'}} {...a11yProps(1)} />
-                            <Tab label={t("SalonManager.workers")} sx={{width:'15vw'}} {...a11yProps(2)} />
-                            <Tab label={t("SalonManager.procedures")} sx={{width:'15vw'}} {...a11yProps(3)} />
+                            <Tab label="Tickets" sx={{width:'15vw'}} {...a11yProps(0)} />
+                            <Tab label="Clients" sx={{width:'15vw'}} {...a11yProps(1)} />
+                            <Tab label="Worker" sx={{width:'15vw'}} {...a11yProps(2)} />
+                            <Tab label="Attractions" sx={{width:'15vw'}} {...a11yProps(3)} />
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
