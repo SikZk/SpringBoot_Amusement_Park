@@ -14,11 +14,13 @@ import org.website.adminpanel.http_messages.responses.AuthenticationResponse;
 import org.website.adminpanel.models.address.Address;
 import org.website.adminpanel.models.address.AddressRepository;
 import org.website.adminpanel.models.amusement_park.AmusementParkRepository;
+import org.website.adminpanel.models.client.Client;
 import org.website.adminpanel.models.owner.OwnerRepository;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -146,5 +148,10 @@ public class WorkerService {
                 return null;
             }
         }
+    }
+
+    public List<Worker> getAllWorkers() {
+        List<Worker> allWorkers = workerRepository.findAll();
+        return allWorkers;
     }
 }

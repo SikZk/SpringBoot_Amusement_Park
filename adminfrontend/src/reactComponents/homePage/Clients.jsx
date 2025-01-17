@@ -84,14 +84,17 @@ export default function Clients(props) {
     }
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'lastName', headerName: "surname", width: 200 },
-        { field: 'phoneNumber', headerName: t("SalonManager.phoneNumber"), width: 200 },
-        { field: 'email', headerName: t("SalonManager.email"), width: 200 },
-        { field: 'comment', headerName: t("SalonManager.comment"), width: 200 },
+        { field: 'sex', headerName: "sex", width: 20 },
+        { field: 'phoneNumber', headerName: "phoneNumber", width: 100 },
+        { field: 'name', headerName: "name", width: 150 },
+        { field: 'surname', headerName: "surname", width: 150 },
+        { field: 'accountCreationDate', headerName: "accountCreationDate", width: 200 },
+        { field: 'email', headerName: "email", width: 300 },
+        { field: 'role', headerName: "role", width: 100 },
         {
             field: 'actions',
             type: 'actions',
-            headerName: t("SalonManager.actions"),
+            headerName: "Actions",
             width: 110,
             cellClassName: 'actions',
             getActions: (params) => {
@@ -132,7 +135,7 @@ export default function Clients(props) {
                 return response.json();
             })
             .then(data => {
-                const clientNames = data.map(client => ({ id: client.clientId, lastName: client.name,phoneNumber:client.phoneNumber,email:client.email,comment:client.park.name}));
+                const clientNames = data.map(client => ({ id: client.clientId, sex: client.sex,phoneNumber:client.phoneNumber,name:client.name,surname:client.surname,accountCreationDate:client.accountCreationDate,email:client.email,role:client.role}));
                 setRows(clientNames);
             })
             .catch(error => {
@@ -168,7 +171,7 @@ export default function Clients(props) {
                 </IconButton>
                 <DialogActions>
                     <Button autoFocus onClick={handleDeleteClickDialog}>
-                        {t("SalonManager.submit")}
+                        {"Submit"}
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
@@ -179,7 +182,7 @@ export default function Clients(props) {
                     columns={columns}
                     localeText={text}
                     slotProps={{ pagination: {
-                            labelRowsPerPage: t("SalonManager.rowsPerPage"),
+                            labelRowsPerPage: "rows per page",
                         } }}
                     initialState={{
                         pagination: {
@@ -194,7 +197,7 @@ export default function Clients(props) {
             </div>
             <div style={{marginTop: '20px'}}>
                 <Button variant="outlined" startIcon={<AddIcon/>} onClick={handleClickOpen}>
-                    {t("SalonManager.addClient")}
+                    Add clients
                 </Button>
 
                 <Dialog

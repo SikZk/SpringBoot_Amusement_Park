@@ -89,13 +89,20 @@ export default function Workers(props) {
     const [t] = useTranslation('global');
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'lastName', headerName: t("SalonManager.nameAndSurname"), width: 250 },
-        { field: 'color', headerName: t("SalonManager.color"), width: 150 },
-        { field: 'borderColor', headerName: t("SalonManager.borderColor"), width: 150 },
+        { field: 'name', headerName: "name", width: 250 },
+        { field: 'surname', headerName: "surname", width: 150 },
+        { field: 'dateOfBirth', headerName: "dateOfBirth", width: 150 },
+        { field: 'pesel', headerName: "pesel", width: 150 },
+        { field: 'sex', headerName: "sex", width: 150 },
+        { field: 'idNumber', headerName: "idNumber", width: 150 },
+        { field: 'employmentDate', headerName: "employmentDate", width: 150 },
+        { field: 'email', headerName: "email", width: 150 },
+        { field: 'bankAccountNumber', headerName: "bankAccountNumber", width: 150 },
+        { field: 'phoneNumber', headerName: "phoneNumber", width: 150 },
         {
             field: 'actions',
             type: 'actions',
-            headerName: t("SalonManager.actions"),
+            headerName: "Actions",
             width: 110,
             cellClassName: 'actions',
             getActions: (params) => {
@@ -123,7 +130,7 @@ export default function Workers(props) {
     const [rows, setRows] = React.useState([]);
 
     const loadTable = () => {
-        fetch(`${api}/salon/worker/getWorkers`,{
+        fetch(`${api}/admin-panel/worker/getAll`,{
             method: 'GET',
             headers:{'Content-Type': 'application/json'},
             credentials:'include'
@@ -135,7 +142,7 @@ export default function Workers(props) {
                 return response.json();
             })
             .then(data => {
-                const workerNames = data.map(worker => ({ id: worker.id, lastName: worker.nameandsurname, color:worker.color,borderColor:worker.borderColor }));
+                const workerNames = data.map(worker => ({ id: worker.id, name: worker.name, surname:worker.surname,dateOfBirth:worker.dateOfBirth,pesel:worker.pesel,sex:worker.sex,idNumber:worker.idNumber,employmentDate:worker.employmentDate, email: worker.email, bankAccountNumber: worker.bankAccountNumber, phoneNumber: worker.phoneNumber, salary: worker.salary }));
                 setRows(workerNames);
             })
             .catch(error => {
