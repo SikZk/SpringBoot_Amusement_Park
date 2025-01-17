@@ -1,8 +1,7 @@
 package org.website.adminpanel.models.worker;
 
-import lombok.NonNull;
+import org.springframework.http.ResponseCookie;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,9 +13,7 @@ import org.website.adminpanel.http_messages.requests.RegisterRequest;
 import org.website.adminpanel.http_messages.responses.AuthenticationResponse;
 import org.website.adminpanel.models.address.Address;
 import org.website.adminpanel.models.address.AddressRepository;
-import org.website.adminpanel.models.amusement_park.AmusementPark;
 import org.website.adminpanel.models.amusement_park.AmusementParkRepository;
-import org.website.adminpanel.models.owner.Owner;
 import org.website.adminpanel.models.owner.OwnerRepository;
 
 import java.math.BigDecimal;
@@ -70,18 +67,22 @@ public class WorkerService {
             if(workerRepository.findWorkerByEmail(request.getEmail()).isPresent()) {
                 return AuthenticationResponse.builder()
                         .additionalInfo("User with this email already exists")
+                        .cookie(null)
                         .token("")
                         .build();
             }
             workerRepository.save(worker);
             String token = jwtService.generateToken(worker);
+
             return AuthenticationResponse.builder()
                     .additionalInfo("User registered successfully")
+                    .cookie(createCookie(token))
                     .token(token)
                     .build();
         } catch (IllegalArgumentException e) {
             return AuthenticationResponse.builder()
                     .additionalInfo("Invalid data format")
+                    .cookie(null)
                     .token("")
                     .build();
         }
@@ -102,20 +103,35 @@ public class WorkerService {
 
             return AuthenticationResponse.builder()
                     .additionalInfo("Logged in")
+                    .cookie(createCookie(token))
                     .token(token)
                     .build();
         } catch (UsernameNotFoundException e) {
             return AuthenticationResponse.builder()
                     .additionalInfo("User not found")
+                    .cookie(null)
                     .token("")
                     .build();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return AuthenticationResponse.builder()
                     .additionalInfo("Invalid credentials")
+                    .cookie(null)
                     .token("")
                     .build();
         }
+    }
+
+    private ResponseCookie createCookie(String token) {
+        return ResponseCookie.from("Bearer")
+                .value(token)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .domain("localhost")
+                .maxAge(10800)
+                .path("/")
+                .build();
     }
 
     private Date parseStringToDate(String date) {

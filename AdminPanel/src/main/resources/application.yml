@@ -31,4 +31,4 @@ eureka:
 custom:
   security:
     jwt:
-      secret: 1e2d1ca930a830460333a4c919465cbc6511d73776a00792138daaa22e880540
+      secret: dac6c0036c5410a38089cb7837e60fa1e388ccaea8f910f65934cf09b6f28bb1

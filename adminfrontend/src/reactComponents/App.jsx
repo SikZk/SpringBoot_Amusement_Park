@@ -3,7 +3,6 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "./loginPage/LoginPage";
 import HomePage from "./homePage/HomePage";
 import PrivateAdminRoutes from "../config/routes/PrivateAdminRoutes";
-import DashboardPage from "./dashboardPage/DashboardPage";
 
 export default function App() {
   return (
@@ -14,13 +13,12 @@ export default function App() {
                   path="/login"
                   element={<LoginPage />}
               />
-              <Route
-                  exact
-                  path="/"
-                  element={<HomePage />}
-              />
               <Route element={<PrivateAdminRoutes />}>
-
+                  <Route
+                      exact
+                      path="/"
+                      element={<HomePage />}
+                  />
               </Route>
           </Routes>
       </BrowserRouter>

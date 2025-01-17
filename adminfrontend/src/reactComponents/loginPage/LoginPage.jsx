@@ -55,7 +55,7 @@ export default function LoginPage() {
             return;
         }
         const loginData = {email:sanitizedLogin,password:sanitizedPassword}
-        fetch(`${api}/user/authenticate/login`,{
+        fetch(`${api}/admin-panel/authentication/login`,{
             method: 'POST',
             headers:{'Content-Type': 'application/json'},
             body:JSON.stringify(loginData),
@@ -65,16 +65,17 @@ export default function LoginPage() {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => {
                 setAlertType('success')
                 setAlertMessage(t("loginForm.successMessage"))
                 setShowAlert(true);
-                navigate('/calendar')
+                navigate('/')
+                return response
+            })
+            .then(data => {
             })
             .catch(error => {
                 setAlertMessage(t("loginForm.errorMessage"))
+                console.log(error)
                 setAlertType('error')
                 setShowAlert(true);
             });
