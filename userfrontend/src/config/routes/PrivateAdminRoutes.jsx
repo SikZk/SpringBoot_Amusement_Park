@@ -9,7 +9,7 @@ const PrivateRoutes = ()=>{
     const api = `${API_BASE_URL}`
 
     useEffect(() => {
-        fetch(`${api}/admin/authorize`,{
+        fetch(`${api}/user-panel/authentication/authorize`,{
             method: 'GET',
             credentials: 'include'
         }).then(response => {

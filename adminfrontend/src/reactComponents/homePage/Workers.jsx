@@ -1,197 +1,223 @@
 import * as React from 'react';
-import {DataGrid, GridActionsCellItem, GridToolbar} from '@mui/x-data-grid';
-import { useEffect } from 'react';
-import {API_BASE_URL} from "../../config/config";
-import {useTranslation} from "react-i18next";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import {styled} from "@mui/material/styles";
-import {Dialog} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import { MuiColorInput } from 'mui-color-input'
+import { useEffect, useState } from 'react';
+import {
+    DataGrid,
+    GridActionsCellItem,
+    GridToolbar
+} from '@mui/x-data-grid';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    IconButton,
+    Button,
+    TextField,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
+import { API_BASE_URL } from '../../config/config';
 
-const api = `${API_BASE_URL}`
+const api = `${API_BASE_URL}`;
+
+// Styled MUI Dialog
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2)
     },
     '& .MuiDialogActions-root': {
-        padding: theme.spacing(1),
-    },
+        padding: theme.spacing(1)
+    }
 }));
+
 export default function Workers(props) {
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const [paramsFromDelete, setParamsFromDelete] = React.useState({row: {}});
-    const [nameAndSurname, setNameAndSurname] = React.useState('');
-    const [color, setColor] = React.useState('');
-    const [borderColor, setBorderColor] = React.useState('');
-    const [openEditDialog, setOpenEditDialog] = React.useState(false);
-    const [idToUpdate, setIdToUpdate] = React.useState(0);
-    const handleEditClick = (params) => () => {
-        setIdToUpdate(params.id);
-        setNameAndSurname(params.row.lastName);
-        setColor(params.row.color);
-        setBorderColor(params.row.borderColor);
-        setOpenEditDialog(true);
+    const { localText } = props;
 
-    }
-    const handleEditClickSubmit = () => {
-        setOpenDialog(false);
-        const updateWorkerData ={
-            firstAndLastName: nameAndSurname,
-            color: color,
-            borderColor: borderColor
-        };
-        fetch(`${api}/salon/worker/update/${idToUpdate}`,{
-            method: 'POST',
-            headers:{'Content-Type': 'application/json'},
-            credentials:'include',
-            body: JSON.stringify(updateWorkerData)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                loadTable();
-            })
-    }
-    const handleCloseEdit = () => {
-        setOpenEditDialog(false);
-    }
-    const handleDeleteClick = (params) => () => {
-        setParamsFromDelete(params);
-        setOpenDialog(true);
-    }
-    const handleDeleteClickDialog = () => {
-        setOpenDialog(false);
-        fetch(`${api}/salon/worker/delete/${paramsFromDelete.id}`,{
-            method: 'GET',
-            headers:{'Content-Type': 'application/json'},
-            credentials:'include'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                loadTable();
-            })
-    }
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-    };
-    const text = props.localText;
-    const [t] = useTranslation('global');
-    const columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: "name", width: 250 },
-        { field: 'surname', headerName: "surname", width: 150 },
-        { field: 'dateOfBirth', headerName: "dateOfBirth", width: 150 },
-        { field: 'pesel', headerName: "pesel", width: 150 },
-        { field: 'sex', headerName: "sex", width: 150 },
-        { field: 'idNumber', headerName: "idNumber", width: 150 },
-        { field: 'employmentDate', headerName: "employmentDate", width: 150 },
-        { field: 'email', headerName: "email", width: 150 },
-        { field: 'bankAccountNumber', headerName: "bankAccountNumber", width: 150 },
-        { field: 'phoneNumber', headerName: "phoneNumber", width: 150 },
-        {
-            field: 'actions',
-            type: 'actions',
-            headerName: "Actions",
-            width: 110,
-            cellClassName: 'actions',
-            getActions: (params) => {
-                return [
-                    <GridActionsCellItem
-                        icon={<EditIcon/>}
-                        label="edit"
-                        sx={{
-                            color: 'primary.main',
-                        }}
-                        onClick={() => handleEditClick(params)()}
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="delete"
-                        sx={{
-                            color: 'primary.main',
-                        }}
-                        onClick={() => handleDeleteClick(params)()}
-                    />,
-                ];
-            },
-        },
-    ];
-    const [rows, setRows] = React.useState([]);
+    // Table data
+    const [rows, setRows] = useState([]);
 
+    // Dialog states
+    const [openDialog, setOpenDialog] = useState(false);      // For delete confirmation
+    const [openEditDialog, setOpenEditDialog] = useState(false); // For editing a worker
+
+    // Row params for the worker to be deleted
+    const [paramsFromDelete, setParamsFromDelete] = useState({ row: {} });
+
+    // Fields for editing a worker
+    const [idToUpdate, setIdToUpdate] = useState(0);
+    const [editName, setEditName] = useState('');
+    const [editSurname, setEditSurname] = useState('');
+    const [editEmail, setEditEmail] = useState('');
+    const [editPesel, setEditPesel] = useState('');
+    const [editIdNumber, setEditIdNumber] = useState('');
+    const [editSex, setEditSex] = useState('M');
+    const [editBankAccountNumber, setEditBankAccountNumber] = useState('');
+    const [editDateOfBirth, setEditDateOfBirth] = useState('');
+
+    // Fetch and load table data
     const loadTable = () => {
-        fetch(`${api}/admin-panel/worker/getAll`,{
+        fetch(`${api}/admin-panel/worker/getAll`, {
             method: 'GET',
-            headers:{'Content-Type': 'application/json'},
-            credentials:'include'
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
         })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
-            .then(data => {
-                const workerNames = data.map(worker => ({ id: worker.id, name: worker.name, surname:worker.surname,dateOfBirth:worker.dateOfBirth,pesel:worker.pesel,sex:worker.sex,idNumber:worker.idNumber,employmentDate:worker.employmentDate, email: worker.email, bankAccountNumber: worker.bankAccountNumber, phoneNumber: worker.phoneNumber, salary: worker.salary }));
-                setRows(workerNames);
+            .then((data) => {
+                const workerRows = data.map((worker) => ({
+                    id: worker.id,
+                    name: worker.name,
+                    surname: worker.surname,
+                    dateOfBirth: worker.dateOfBirth,
+                    pesel: worker.pesel,
+                    sex: worker.sex,
+                    idNumber: worker.idNumber,
+                    employmentDate: worker.employmentDate,
+                    email: worker.email,
+                    bankAccountNumber: worker.bankAccountNumber,
+                    phoneNumber: worker.phoneNumber,
+                    salary: worker.salary
+                }));
+                setRows(workerRows);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     useEffect(loadTable, []);
+
+    // ---- DELETE DIALOG LOGIC ----
+    const handleDeleteClick = (params) => () => {
+        setParamsFromDelete(params);
+        setOpenDialog(true);
+    };
+
+    const handleDeleteClickDialog = () => {
+        setOpenDialog(false);
+        fetch(`${api}/admin-panel/workers/delete/${paramsFromDelete.id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                loadTable();
+            })
+            .catch((err) => console.error('Delete Error:', err));
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    // ---- EDIT DIALOG LOGIC ----
+    const handleEditClick = (params) => () => {
+        setIdToUpdate(params.id);
+        setEditName(params.row.name || '');
+        setEditSurname(params.row.surname || '');
+        setEditEmail(params.row.email || '');
+        setEditPesel(params.row.pesel || '');
+        setEditIdNumber(params.row.idNumber || '');
+        setEditSex(params.row.sex || 'M');
+        setEditBankAccountNumber(params.row.bankAccountNumber || '');
+        setEditDateOfBirth(params.row.dateOfBirth || '');
+
+        setOpenEditDialog(true);
+    };
+
+    const handleCloseEdit = () => {
+        setOpenEditDialog(false);
+    };
+
+    // Submitting updated fields
+    const handleSubmitEdit = () => {
+        const updateData = {
+            name: editName,
+            surname: editSurname,
+            email: editEmail,
+            pesel: editPesel,
+            idNumber: editIdNumber,
+            sex: editSex,
+            bankAccountNumber: editBankAccountNumber,
+            dateOfBirth: editDateOfBirth
+        };
+
+        fetch(`${api}/admin-panel/worker/update/${idToUpdate}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(updateData)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                loadTable();
+                setOpenEditDialog(false);
+            })
+            .catch((err) => console.error('Edit Error:', err));
+    };
+
+    // DataGrid columns
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'surname', headerName: 'Surname', width: 130 },
+        { field: 'email', headerName: 'Email', width: 150 },
+        { field: 'pesel', headerName: 'PESEL', width: 130 },
+        { field: 'idNumber', headerName: 'ID Number', width: 120 },
+        { field: 'sex', headerName: 'Sex', width: 100 },
+        { field: 'bankAccountNumber', headerName: 'Bank Account', width: 170 },
+        { field: 'dateOfBirth', headerName: 'Date of Birth', width: 130 },
+        { field: 'employmentDate', headerName: 'Employment Date', width: 130 },
+        { field: 'phoneNumber', headerName: 'Phone', width: 120 },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 110,
+            cellClassName: 'actions',
+            getActions: (params) => [
+                <GridActionsCellItem
+                    icon={<EditIcon />}
+                    label="Edit"
+                    sx={{ color: 'primary.main' }}
+                    onClick={handleEditClick(params)}
+                />,
+                <GridActionsCellItem
+                    icon={<DeleteIcon />}
+                    label="Delete"
+                    sx={{ color: 'error.main' }}
+                    onClick={handleDeleteClick(params)}
+                />
+            ]
+        }
+    ];
+
     return (
-        <React.Fragment>
+        <>
+            {/* EDIT DIALOG */}
             <BootstrapDialog
                 onClose={handleCloseEdit}
                 aria-labelledby="customized-dialog-title"
                 open={openEditDialog}
             >
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    {t("SalonManager.updateWorker")}
+                    Update Worker
                 </DialogTitle>
-                <DialogContent>
-
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="outlined-basic"
-                        variant="outlined"
-                        name="name"
-                        value={nameAndSurname}
-                        label={t("SalonManager.nameAndSurnameWorker")}
-                        type="text"
-                        fullWidth
-                        onChange={(e) => setNameAndSurname(e.target.value)}
-                        sx={{marginBottom: '20px'}}
-                    />
-                    <MuiColorInput
-                        format="hex"
-                        label={t("SalonManager.color")}
-                        value={color}
-                        onChange={(newValue) => setColor(newValue)}
-                        sx={{width: '49%'}}
-                    />
-                    <MuiColorInput
-                        format="hex"
-                        label={t("SalonManager.borderColor")}
-                        value={borderColor}
-                        onChange={(newValue) => setBorderColor(newValue)}
-                        sx={{width: '49%', marginLeft: '2%'}}
-                    />
-                </DialogContent>
                 <IconButton
                     aria-label="close"
                     onClick={handleCloseEdit}
@@ -199,30 +225,103 @@ export default function Workers(props) {
                         position: 'absolute',
                         right: 8,
                         top: 8,
-                        color: (theme) => theme.palette.grey[500],
+                        color: (theme) => theme.palette.grey[500]
                     }}
                 >
                     <CloseIcon />
                 </IconButton>
+
+                <DialogContent dividers>
+                    <TextField
+                        label="Name"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="Surname"
+                        value={editSurname}
+                        onChange={(e) => setEditSurname(e.target.value)}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="Email"
+                        value={editEmail}
+                        onChange={(e) => setEditEmail(e.target.value)}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="PESEL"
+                        value={editPesel}
+                        onChange={(e) => setEditPesel(e.target.value)}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="ID Number"
+                        value={editIdNumber}
+                        onChange={(e) => setEditIdNumber(e.target.value)}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+
+                    {/* Sex Select */}
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                        <InputLabel>Sex</InputLabel>
+                        <Select
+                            value={editSex}
+                            label="Sex"
+                            onChange={(e) => setEditSex(e.target.value)}
+                        >
+                            <MenuItem value="M">M</MenuItem>
+                            <MenuItem value="F">F</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <TextField
+                        label="Bank Account Number"
+                        value={editBankAccountNumber}
+                        onChange={(e) => setEditBankAccountNumber(e.target.value)}
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+
+                    {/* Date of Birth (type="date") */}
+                    <TextField
+                        label="Date of Birth"
+                        type="date"
+                        value={editDateOfBirth}
+                        onChange={(e) => setEditDateOfBirth(e.target.value)}
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                    />
+                </DialogContent>
+
                 <DialogActions>
-                    <Button autoFocus onClick={handleEditClickSubmit}>
-                        {t("SalonManager.submit")}
+                    <Button
+                        variant="contained"
+                        onClick={handleSubmitEdit}
+                        sx={{ color: 'white', backgroundColor: 'primary.main' }}
+                    >
+                        Submit
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
 
-
-
+            {/* DELETE DIALOG */}
             <BootstrapDialog
                 onClose={handleCloseDialog}
                 aria-labelledby="customized-dialog-title"
                 open={openDialog}
             >
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    {t("SalonManager.deleteWorkerWarning")}
+                    Are you sure you want to delete this worker?
                 </DialogTitle>
-                <DialogContent>
-                    {paramsFromDelete.row.lastName}
+                <DialogContent dividers>
+                    {paramsFromDelete.row.email}
                 </DialogContent>
                 <IconButton
                     aria-label="close"
@@ -231,39 +330,43 @@ export default function Workers(props) {
                         position: 'absolute',
                         right: 8,
                         top: 8,
-                        color: (theme) => theme.palette.grey[500],
+                        color: (theme) => theme.palette.grey[500]
                     }}
                 >
                     <CloseIcon />
                 </IconButton>
                 <DialogActions>
-                    <Button autoFocus onClick={handleDeleteClickDialog}>
-                        {t("SalonManager.submit")}
+                    <Button
+                        variant="contained"
+                        onClick={handleDeleteClickDialog}
+                        sx={{ color: 'white', backgroundColor: 'error.main' }}
+                    >
+                        Submit
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
 
-            <div style={{height: '60vh', width: '100%'}}>
+            {/* DATA GRID */}
+            <div style={{ height: '60vh', width: '100%' }}>
                 <DataGrid
                     loading={rows.length === 0}
                     rows={rows}
                     columns={columns}
-                    localeText={text}
-                    slotProps={{ pagination: {
-                        labelRowsPerPage: t("SalonManager.rowsPerPage"),
-                    } }}
+                    localeText={localText}
+                    slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                        pagination: {
+                            labelRowsPerPage: 'rows per page'
+                        }
+                    }}
                     initialState={{
                         pagination: {
-                            paginationModel: {page: 0, pageSize: 10},
-                        },
+                            paginationModel: { page: 0, pageSize: 10 }
+                        }
                     }}
-
-                    pageSizeOptions={[10,25,100]}
-                    slots={{
-                        toolbar: GridToolbar,
-                    }}
+                    pageSizeOptions={[10, 25, 100]}
                 />
             </div>
-        </React.Fragment>
+        </>
     );
 }

@@ -2,9 +2,8 @@ package org.website.adminpanel.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.website.adminpanel.http_messages.requests.UpdateWorkerRequest;
 import org.website.adminpanel.models.worker.Worker;
 import org.website.adminpanel.models.worker.WorkerService;
 
@@ -21,5 +20,19 @@ public class WorkerController {
 
         List<Worker> allWorkers = workerService.getAllWorkers();
         return ResponseEntity.ok().body(allWorkers);
+    }
+    @PostMapping("update/{id}")
+    public ResponseEntity<Worker> updateWorker(
+            @PathVariable("id") String id,
+            @RequestBody UpdateWorkerRequest updateWorkerRequest
+    ){
+        Worker updatedWorker;
+        try{
+            System.out.println("id: " + id);
+            updatedWorker = workerService.updateWorker(id, updateWorkerRequest);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok().body(updatedWorker);
     }
 }

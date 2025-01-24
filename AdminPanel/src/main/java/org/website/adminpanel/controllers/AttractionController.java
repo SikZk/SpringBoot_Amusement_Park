@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.website.adminpanel.models.attraction.Attraction;
 import org.website.adminpanel.models.attraction.AttractionService;
-import org.website.adminpanel.models.worker.Worker;
 
 import java.util.List;
 

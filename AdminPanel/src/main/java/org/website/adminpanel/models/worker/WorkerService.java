@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.website.adminpanel.config.security.JwtService;
 import org.website.adminpanel.http_messages.requests.AuthenticationRequest;
 import org.website.adminpanel.http_messages.requests.RegisterRequest;
+import org.website.adminpanel.http_messages.requests.UpdateWorkerRequest;
 import org.website.adminpanel.http_messages.responses.AuthenticationResponse;
 import org.website.adminpanel.models.address.Address;
 import org.website.adminpanel.models.address.AddressRepository;
@@ -153,5 +154,21 @@ public class WorkerService {
     public List<Worker> getAllWorkers() {
         List<Worker> allWorkers = workerRepository.findAll();
         return allWorkers;
+    }
+
+    public Worker updateWorker(String id, UpdateWorkerRequest updateWorkerRequest) {
+        Worker worker = workerRepository.findById(Integer.parseInt(id))
+                .orElseThrow(() -> new IllegalArgumentException("Worker not found"));
+        worker.setName(updateWorkerRequest.getName());
+        worker.setSurname(updateWorkerRequest.getSurname());
+        worker.setPesel(updateWorkerRequest.getPesel());
+        worker.setIdNumber(updateWorkerRequest.getIdNumber());
+        worker.setEmail(updateWorkerRequest.getEmail());
+        worker.setBankAccountNumber(updateWorkerRequest.getBankAccountNumber());
+        worker.setSex(updateWorkerRequest.getSex());
+        worker.setDateOfBirth(parseStringToDate(updateWorkerRequest.getDateOfBirth()));
+
+        workerRepository.saveAndFlush(worker);
+        return worker;
     }
 }

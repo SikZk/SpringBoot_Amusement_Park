@@ -1,8 +1,14 @@
 server:
   port: 8080
   address: localhost
+  error:
+    whitelabel:
+      enabled: false
+
+
 
 spring:
+
   datasource:
     username: C##AmusementPark
     url: jdbc:oracle:thin:@localhost:1521:XE
