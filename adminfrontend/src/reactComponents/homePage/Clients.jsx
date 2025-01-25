@@ -1,399 +1,531 @@
-import * as React from 'react';
-import {DataGrid, GridActionsCellItem, GridToolbar} from '@mui/x-data-grid';
-import {useEffect, useState} from 'react';
-import {API_BASE_URL} from "../../config/config";
-import {useTranslation} from "react-i18next";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import {Dialog} from "@mui/material";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
+import React, { useEffect, useState } from 'react';
+import {
+    DataGrid,
+    GridActionsCellItem,
+    GridToolbar
+} from '@mui/x-data-grid';
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    DialogActions,
+    IconButton,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import dayjs from "dayjs";
+import { styled } from '@mui/material/styles';
+import { API_BASE_URL } from '../../config/config';
 
-const api = `${API_BASE_URL}`
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const api = `${API_BASE_URL}`;
+
+const drawerStyles = ({ theme }) => ({
     '& .MuiDialogContent-root': {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2)
     },
     '& .MuiDialogActions-root': {
-        padding: theme.spacing(1),
-    },
-}));
+        padding: theme.spacing(1)
+    }
+});
+
+const BootstrapDialog = styled(Dialog)(drawerStyles);
+
 export default function Clients(props) {
-    const [t] = useTranslation('global');
-    const text = props.localText;
-    const [open, setOpen] = useState(false);
+    const { localText } = props;
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    // DataGrid rows
+    const [rows, setRows] = useState([]);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const [paramsFromDelete, setParamsFromDelete] = React.useState({row: {}});
+    // Dialog states
+    const [openAdd, setOpenAdd] = useState(false); // Add-client dialog
+    const [openEdit, setOpenEdit] = useState(false); // Edit-client dialog
+    const [openDelete, setOpenDelete] = useState(false); // Delete confirmation dialog
 
-    const handleClickOpenDialog = () => {
-        setOpenDialog(true);
-    };
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-    };
-    const handleDeleteClick = (params) => () => {
-        setParamsFromDelete(params);
-        setOpenDialog(true);
-    }
-    const handleDeleteClickDialog = () => {
-        setOpenDialog(false);
-        fetch(`${api}/salon/client/delete/${paramsFromDelete.id}`,{
-            method: 'GET',
-            headers:{'Content-Type': 'application/json'},
-            credentials:'include'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                loadTable();
-            })
-    }
-    const[openEdit,setOpenEdit] = useState(false);
-    const [name1, setName1] = useState('');
-    const [phoneNumber1, setPhoneNumber1] = useState('');
-    const [email1, setEmail1] = useState('');
-    const [description1, setDescription1] = useState('');
-    const [idToUpdate, setIdToUpdate] = React.useState(0);
-    const handleCloseEdit = () => () => {
-        setOpenEdit(false);
-    }
-    const handleEditClick = (params) => () => {
-        setIdToUpdate(params.id);
-        setName1(params.row.lastName);
-        setPhoneNumber1(params.row.phoneNumber);
-        setEmail1(params.row.email);
-        setDescription1(params.row.comment);
-        setOpenEdit(true);
-    }
-    const columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'sex', headerName: "sex", width: 20 },
-        { field: 'phoneNumber', headerName: "phoneNumber", width: 100 },
-        { field: 'name', headerName: "name", width: 150 },
-        { field: 'surname', headerName: "surname", width: 150 },
-        { field: 'accountCreationDate', headerName: "accountCreationDate", width: 200 },
-        { field: 'email', headerName: "email", width: 300 },
-        { field: 'role', headerName: "role", width: 100 },
-        {
-            field: 'actions',
-            type: 'actions',
-            headerName: "Actions",
-            width: 110,
-            cellClassName: 'actions',
-            getActions: (params) => {
-                return [
-                    <GridActionsCellItem
-                        icon={<EditIcon/>}
-                        label="edit"
-                        sx={{
-                            color: 'primary.main',
-                        }}
-                        onClick={() => handleEditClick(params)()}
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="delete"
-                        sx={{
-                            color: 'primary.main',
-                        }}
-                        onClick={() => handleDeleteClick(params)()}
-                    />,
-                ];
-            },
-        },
-    ];
+    // For deleting a client
+    const [paramsFromDelete, setParamsFromDelete] = useState({ row: {} });
 
-    const [rows, setRows] = React.useState([]);
+    // For editing a client
+    const [idToUpdate, setIdToUpdate] = useState(0);
+    const [editName, setEditName] = useState('');
+    const [editSurname, setEditSurname] = useState('');
+    const [editEmail, setEditEmail] = useState('');
+    const [editPhoneNumber, setEditPhoneNumber] = useState('');
+    const [editSex, setEditSex] = useState('M');
+    const [editAccountCreationDate, setEditAccountCreationDate] = useState('');
 
+    // For adding a client
+    const [addName, setAddName] = useState('');
+    const [addSurname, setAddSurname] = useState('');
+    const [addEmail, setAddEmail] = useState('');
+    const [addPhoneNumber, setAddPhoneNumber] = useState('');
+    const [addSex, setAddSex] = useState('M');
+    const [addPassword, setAddPassword] = useState('');
+
+    // Load table data
     const loadTable = () => {
-        fetch(`${api}/admin-panel/client/getAll`,{
+        fetch(`${api}/admin-panel/client/getAll`, {
             method: 'GET',
-            headers:{'Content-Type': 'application/json'},
-            credentials:'include'
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
         })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
-            .then(data => {
-                const clientNames = data.map(client => ({ id: client.clientId, sex: client.sex,phoneNumber:client.phoneNumber,name:client.name,surname:client.surname,accountCreationDate:client.accountCreationDate,email:client.email,role:client.role}));
-                setRows(clientNames);
+            .then((data) => {
+                const mappedData = data.map((client) => ({
+                    id: client.clientId,
+                    name: client.name,
+                    surname: client.surname,
+                    email: client.email,
+                    phoneNumber: client.phoneNumber,
+                    sex: client.sex,
+                    accountCreationDate: client.accountCreationDate,
+                    role: client.role
+                }));
+                setRows(mappedData);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error:', error);
             });
-    }
+    };
 
     useEffect(loadTable, []);
+
+    // ---------- Delete Client Logic ----------
+    const handleDeleteOpen = () => setOpenDelete(true);
+    const handleDeleteClose = () => setOpenDelete(false);
+
+    const handleDeleteClick = (params) => () => {
+        setParamsFromDelete(params);
+        handleDeleteOpen();
+    };
+
+    const handleDeleteConfirm = () => {
+        setOpenDelete(false);
+        fetch(`${api}/admin-panel/client/delete/${paramsFromDelete.id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                loadTable();
+            })
+            .catch((error) => {
+                console.error('Delete Error:', error);
+            });
+    };
+
+    // ---------- Add Client Logic ----------
+    const handleAddOpen = () => setOpenAdd(true);
+    const handleAddClose = () => setOpenAdd(false);
+
+    const handleAddSubmit = (e) => {
+        e.preventDefault();
+
+        const newClient = {
+            name: addName,
+            surname: addSurname,
+            email: addEmail,
+            phoneNumber: addPhoneNumber,
+            sex: addSex,
+            password: addPassword
+        };
+
+        fetch(`${api}/admin-panel/client/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(newClient)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                loadTable();
+            })
+            .catch((error) => console.error('Add Error:', error));
+
+        // Reset fields & close dialog
+        setAddName('');
+        setAddSurname('');
+        setAddEmail('');
+        setAddPhoneNumber('');
+        setAddSex('M');
+        setAddPassword('');
+
+        handleAddClose();
+    };
+
+    // ---------- Edit Client Logic ----------
+    const handleEditOpen = () => setOpenEdit(true);
+    const handleEditClose = () => setOpenEdit(false);
+
+    const handleEditClick = (params) => () => {
+        setIdToUpdate(params.id);
+
+        setEditName(params.row.name || '');
+        setEditSurname(params.row.surname || '');
+        setEditEmail(params.row.email || '');
+        setEditPhoneNumber(params.row.phoneNumber || '');
+        setEditSex(params.row.sex || 'M');
+        setEditAccountCreationDate(params.row.accountCreationDate || '');
+
+        handleEditOpen();
+    };
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault();
+
+        const updatedClient = {
+            name: editName,
+            surname: editSurname,
+            email: editEmail,
+            phoneNumber: editPhoneNumber,
+            sex: editSex,
+            accountCreationDate: editAccountCreationDate
+        };
+
+        fetch(`${api}/admin-panel/client/update/${idToUpdate}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(updatedClient)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                loadTable();
+            })
+            .catch((error) => console.error('Update Error:', error));
+
+        handleEditClose();
+    };
+
+    // ---------- DataGrid columns ----------
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'sex', headerName: 'Sex', width: 70 },
+        { field: 'phoneNumber', headerName: 'Phone', width: 110 },
+        { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'surname', headerName: 'Surname', width: 130 },
+        { field: 'accountCreationDate', headerName: 'Created On', width: 130 },
+        { field: 'email', headerName: 'Email', width: 220 },
+        { field: 'role', headerName: 'Role', width: 100 },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 110,
+            cellClassName: 'actions',
+            getActions: (params) => [
+                <GridActionsCellItem
+                    icon={<EditIcon />}
+                    label="Edit"
+                    sx={{ color: 'primary.main' }}
+                    onClick={handleEditClick(params)}
+                />,
+                <GridActionsCellItem
+                    icon={<DeleteIcon />}
+                    label="Delete"
+                    sx={{ color: 'error.main' }}
+                    onClick={handleDeleteClick(params)}
+                />
+            ]
+        }
+    ];
+
     return (
-        <React.Fragment>
+        <>
+            {/* DELETE CONFIRMATION DIALOG */}
             <BootstrapDialog
-                onClose={handleCloseDialog}
-                aria-labelledby="customized-dialog-title"
-                open={openDialog}
+                onClose={handleDeleteClose}
+                open={openDelete}
             >
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    {t("SalonManager.deleteClientWarning")}
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Are you sure you want to delete this client?
                 </DialogTitle>
-                <DialogContent>
-                        {paramsFromDelete.row.email}
+
+                <DialogContent dividers>
+                    {paramsFromDelete.row.email}
                 </DialogContent>
+
                 <IconButton
                     aria-label="close"
-                    onClick={handleCloseDialog}
+                    onClick={handleDeleteClose}
                     sx={{
                         position: 'absolute',
                         right: 8,
                         top: 8,
-                        color: (theme) => theme.palette.grey[500],
+                        color: (theme) => theme.palette.grey[500]
                     }}
                 >
                     <CloseIcon />
                 </IconButton>
+
                 <DialogActions>
-                    <Button autoFocus onClick={handleDeleteClickDialog}>
-                        {"Submit"}
+                    <Button
+                        variant="contained"
+                        onClick={handleDeleteConfirm}
+                        sx={{ color: 'white', backgroundColor: 'error.main' }}
+                    >
+                        Submit
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
-            <div style={{height: '60vh', width: '100%'}}>
+
+            {/* DATA GRID */}
+            <div style={{ height: '60vh', width: '100%' }}>
                 <DataGrid
                     loading={rows.length === 0}
                     rows={rows}
                     columns={columns}
-                    localeText={text}
-                    slotProps={{ pagination: {
-                            labelRowsPerPage: "rows per page",
-                        } }}
+                    localeText={localText}
+                    slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                        pagination: {
+                            labelRowsPerPage: 'rows per page'
+                        }
+                    }}
                     initialState={{
                         pagination: {
-                            paginationModel: {page: 0, pageSize: 25},
-                        },
+                            paginationModel: { page: 0, pageSize: 25 }
+                        }
                     }}
-                    pageSizeOptions={[10, 25,100]}
-                    slots={{
-                        toolbar: GridToolbar,
-                    }}
+                    pageSizeOptions={[10, 25, 100]}
                 />
             </div>
-            <div style={{marginTop: '20px'}}>
-                <Button variant="outlined" startIcon={<AddIcon/>} onClick={handleClickOpen}>
-                    Add clients
+
+            <div style={{ marginTop: '20px' }}>
+                {/* ADD CLIENT BUTTON */}
+                <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={handleAddOpen}
+                    sx={{ color: 'white', backgroundColor: 'primary.main' }}
+                >
+                    Add client
                 </Button>
-
-                <Dialog
-                    open={openEdit}
-                    onClose={handleCloseEdit}
-                    PaperProps={{
-                        component: 'form',
-                        onSubmit: (event) => {
-                            event.preventDefault();
-                            const procedureAddData = {
-                                firstAndLastName: name1,
-                                phoneNumber: phoneNumber1,
-                                email: email1,
-                                comment: description1
-                            };
-                            fetch(`${api}/salon/client/update/${idToUpdate}`, {
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                credentials: 'include',
-                                body: JSON.stringify(procedureAddData)
-                            })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error(`HTTP error! status: ${response.status}`);
-                                    }
-                                    loadTable();
-                                })
-                            handleCloseEdit();
-                            setOpenEdit(false);
-                        },
-                    }}
-                >
-                    <DialogTitle>{t("SalonManager.updateClient")}</DialogTitle>
-                    <DialogContent>
-                        <div className="formVisit">
-                            <div className="formVisitComponent">
-                                <TextField
-                                    autoFocus
-                                    required
-                                    margin="dense"
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    name="name"
-                                    value={name1}
-                                    label={t("SalonManager.clientName")}
-                                    type="text"
-                                    fullWidth
-                                    onChange={(e) => setName1(e.target.value)}
-                                />
-                            </div>
-                            <div className="formVisitComponent" style={{marginTop: 3}}>
-                                <TextField
-                                    required={true}
-                                    id="outlined-number"
-                                    name="email"
-                                    value={email1}
-                                    label={t("SalonManager.email")}
-                                    type="email"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    onChange={(e) => setEmail1(e.target.value)}
-                                />
-
-                                <TextField
-                                    required={true}
-                                    id="outlined-number"
-                                    name="phoneNumber"
-                                    value={phoneNumber1}
-                                    label={t("SalonManager.phoneNumber")}
-                                    type="number"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    onChange={(e) => setPhoneNumber1(e.target.value)}
-                                />
-                            </div>
-                            <div className="formVisitComponent">
-                                <TextField
-                                    autoFocus
-                                    required
-                                    margin="dense"
-                                    id="outlined-basic"
-                                    value={description1}
-                                    variant="outlined"
-                                    name="description"
-                                    label={t("SalonManager.description")}
-                                    type="text"
-                                    fullWidth
-                                    onChange={(e) => setDescription1(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseEdit()}>{t("SalonManager.cancel")}</Button>
-                        <Button type="submit">{t("SalonManager.addClient")}</Button>
-                    </DialogActions>
-                </Dialog>
-
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    PaperProps={{
-                        component: 'form',
-                        onSubmit: (event) => {
-                            event.preventDefault();
-                            const formData = new FormData(event.currentTarget);
-                            const formJson = Object.fromEntries(formData.entries());
-                            const name1 = formJson.name;
-                            const phoneNumber1 = formJson.phoneNumber;
-                            const email1 = formJson.email;
-                            const description1 = formJson.description;
-                            const procedureAddData = {
-                                firstAndLastName: name1,
-                                phoneNumber: phoneNumber1,
-                                email: email1,
-                                comment: description1
-                            };
-                            fetch(`${api}/salon/client/add`, {
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                credentials: 'include',
-                                body: JSON.stringify(procedureAddData)
-                            })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error(`HTTP error! status: ${response.status}`);
-                                    }
-                                    loadTable();
-                                    return response.json();
-                                })
-                            handleClose();
-                        },
-                    }}
-                >
-                    <DialogTitle>{t("SalonManager.addClient")}</DialogTitle>
-                    <DialogContent>
-                        <div className="formVisit">
-                            <div className="formVisitComponent">
-                                <TextField
-                                    autoFocus
-                                    required
-                                    margin="dense"
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    name="name"
-                                    label={t("SalonManager.clientName")}
-                                    type="text"
-                                    fullWidth
-                                />
-                            </div>
-                            <div className="formVisitComponent" style={{marginTop: 3}}>
-                                <TextField
-                                    required={true}
-                                    id="outlined-number"
-                                    name="email"
-                                    label={t("SalonManager.email")}
-                                    type="email"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-
-                                <TextField
-                                    required={true}
-                                    id="outlined-number"
-                                    name="phoneNumber"
-                                    label={t("SalonManager.phoneNumber")}
-                                    type="number"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </div>
-                            <div className="formVisitComponent">
-                                <TextField
-                                    autoFocus
-                                    required
-                                    margin="dense"
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    name="description"
-                                    label={t("SalonManager.description")}
-                                    type="text"
-                                    fullWidth
-                                />
-                            </div>
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>{t("SalonManager.cancel")}</Button>
-                        <Button type="submit">{t("SalonManager.addClient")}</Button>
-                    </DialogActions>
-                </Dialog>
             </div>
-        </React.Fragment>
+
+            {/* ADD CLIENT DIALOG */}
+            <Dialog open={openAdd} onClose={handleAddClose}>
+                <DialogTitle>Add Client</DialogTitle>
+                <IconButton
+                    aria-label="close"
+                    onClick={handleAddClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500]
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <DialogContent dividers>
+                    <form id="add-client-form" onSubmit={handleAddSubmit}>
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            label="Name"
+                            variant="outlined"
+                            value={addName}
+                            onChange={(e) => setAddName(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Surname"
+                            variant="outlined"
+                            value={addSurname}
+                            onChange={(e) => setAddSurname(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Email"
+                            type="email"
+                            variant="outlined"
+                            value={addEmail}
+                            onChange={(e) => setAddEmail(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Phone Number"
+                            type="tel"
+                            variant="outlined"
+                            value={addPhoneNumber}
+                            onChange={(e) => setAddPhoneNumber(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <FormControl fullWidth sx={{ mb: 2 }}>
+                            <InputLabel>Sex</InputLabel>
+                            <Select
+                                value={addSex}
+                                label="Sex"
+                                onChange={(e) => setAddSex(e.target.value)}
+                            >
+                                <MenuItem value="M">M</MenuItem>
+                                <MenuItem value="F">F</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Password"
+                            type="password"
+                            variant="outlined"
+                            value={addPassword}
+                            onChange={(e) => setAddPassword(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleAddClose}>Cancel</Button>
+                    <Button
+                        form="add-client-form"
+                        type="submit"
+                        variant="contained"
+                        sx={{ color: 'white', backgroundColor: 'primary.main' }}
+                    >
+                        Add Client
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* EDIT CLIENT DIALOG */}
+            <Dialog open={openEdit} onClose={handleEditClose}>
+                <DialogTitle>Edit Client</DialogTitle>
+                <IconButton
+                    aria-label="close"
+                    onClick={handleEditClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500]
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <DialogContent dividers>
+                    <form id="edit-client-form" onSubmit={handleEditSubmit}>
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            label="Name"
+                            variant="outlined"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Surname"
+                            variant="outlined"
+                            value={editSurname}
+                            onChange={(e) => setEditSurname(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Email"
+                            type="email"
+                            variant="outlined"
+                            value={editEmail}
+                            onChange={(e) => setEditEmail(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Phone Number"
+                            type="tel"
+                            variant="outlined"
+                            value={editPhoneNumber}
+                            onChange={(e) => setEditPhoneNumber(e.target.value)}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                        />
+
+                        <FormControl fullWidth sx={{ mb: 2 }}>
+                            <InputLabel>Sex</InputLabel>
+                            <Select
+                                value={editSex}
+                                label="Sex"
+                                onChange={(e) => setEditSex(e.target.value)}
+                            >
+                                <MenuItem value="M">M</MenuItem>
+                                <MenuItem value="F">F</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <TextField
+                            required
+                            margin="dense"
+                            label="Account Creation Date"
+                            type="date"
+                            variant="outlined"
+                            value={editAccountCreationDate}
+                            onChange={(e) => setEditAccountCreationDate(e.target.value)}
+                            InputLabelProps={{ shrink: true }}
+                            fullWidth
+                        />
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEditClose}>Cancel</Button>
+                    <Button
+                        form="edit-client-form"
+                        type="submit"
+                        variant="contained"
+                        sx={{ color: 'white', backgroundColor: 'primary.main' }}
+                    >
+                        Update Client
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     );
 }

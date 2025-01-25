@@ -18,26 +18,25 @@ export default function App() {
               />
               <Route
                   exact
-                  path="/mytickets"
-                  element={<TicketPage />}
-              />
-              <Route
-                  exact
-                  path="/myaccount"
-                  element={<AccountPage />}
-              />
-              <Route
-                  exact
                   path="/"
                   element={<HomePage />}
               />
-              <Route
-                  exact
-                  path="/settings"
-                  element={<SettingsPage />}
-              />
               <Route element={<PrivateAdminRoutes />}>
-
+                  <Route
+                      exact
+                      path="/mytickets"
+                      element={<TicketPage />}
+                  />
+                  <Route
+                      exact
+                      path="/myaccount"
+                      element={<AccountPage />}
+                  />
+                  <Route
+                      exact
+                      path="/settings"
+                      element={<SettingsPage />}
+                  />
               </Route>
           </Routes>
       </BrowserRouter>
